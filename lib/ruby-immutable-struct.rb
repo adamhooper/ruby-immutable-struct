@@ -18,7 +18,13 @@ module RubyImmutableStruct
             #{attributes.map.with_index{ |a, i| "@#{a} = args[#{i}]" }.join(';')}
           end
 
+          after_initialize
+
           freeze
+        end
+
+        def after_initialize
+          # Implementations may override this
         end
 
         def merge(hash)

@@ -8,8 +8,10 @@ First, add this to your Gemfile:
 gem 'ruby-immutable-struct'
 ```
 
+Then use it like this:
+
 ```ruby
-Person = RubyImmutableStruct.new('Person', :name, :email) do
+Person = RubyImmutableStruct.new(:name, :email) do
   def rfc5322_email
     "\"#{name}\" <#{email}>"
   end
@@ -36,6 +38,18 @@ person.inspect # '#<Person:"Adam Hooper","adam@adamhooper.com")'
 # person.email = 'adam+nospam@adamhooper.com'
 # You never change an instance; you only create a new one, like this:
 person2 = person.merge(email: 'adam+nospam@adamhooper.com')
+```
+
+Here's a bit of a hack for when you want to run calculations just once:
+
+```ruby
+Person = RubyImmutableStruct.new(:name, :email) do
+  def after_initialize
+    if @email.nil?
+      @email = "#{name.gsub(/[^a-zA-Z0-9]+/, '-')}@gmail.com"
+    end
+  end
+end
 ```
 
 ## Similar projects

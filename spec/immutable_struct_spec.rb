@@ -68,6 +68,17 @@ describe RubyImmutableStruct do
     expect { struct.new('abc').b! }.to raise_error(RuntimeError)
   end
 
+  it 'should allow modifications in after_initialize' do
+    struct = RubyImmutableStruct.new(:a) do
+      def b; @b; end
+
+      def after_initialize
+        @b = 3
+      end
+    end
+    expect(struct.new('abc').b).to eq(3)
+  end
+
   it 'should inspect properly' do
     SomeStruct = RubyImmutableStruct.new(:a, :b)
     expect(SomeStruct.new('A', 'B').inspect).to eq('#<SomeStruct "A","B">')

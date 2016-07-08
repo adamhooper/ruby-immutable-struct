@@ -40,6 +40,15 @@ module RubyImmutableStruct
           [ #{attributes.map{ |a| "@#{a}" }.join(',')} ]
         end
 
+        def ==(other)
+          #{attributes.map{ |a| "@#{a} == other.#{a}" }.join(' && ')}
+        end
+        alias :eql? :==
+
+        def hash
+          to_a.hash
+        end
+
         def inspect
           "#<#\{self.class.name} #\{to_a.map(&:inspect).join(',')}>"
         end

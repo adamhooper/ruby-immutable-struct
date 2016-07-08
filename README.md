@@ -38,6 +38,14 @@ person.inspect # '#<Person:"Adam Hooper","adam@adamhooper.com")'
 # person.email = 'adam+nospam@adamhooper.com'
 # You never change an instance; you only create a new one, like this:
 person2 = person.merge(email: 'adam+nospam@adamhooper.com')
+
+# When two immutable structs have the same values, they are equal
+person3 = person2.merge(email: 'adam@adamhooper.com')
+person == person3    # true
+person.eql?(person3) # true
+# And that means you can use them in a hash
+hash = { person => 'yay' }
+hash[person3] # 'yay'
 ```
 
 Here's a bit of a hack for when you want to run calculations just once:

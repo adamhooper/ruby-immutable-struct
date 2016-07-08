@@ -79,6 +79,46 @@ describe RubyImmutableStruct do
     expect(struct.new('abc').b).to eq(3)
   end
 
+  it 'should compare for equality' do
+    struct = RubyImmutableStruct.new(:a)
+    expect(struct.new('foo')).to eq(struct.new('foo'))
+  end
+
+  it 'should return inequality' do
+    struct = RubyImmutableStruct.new(:a, :b)
+    expect(struct.new('foo', 'bar')).not_to eq(struct.new('foo', 'baz'))
+  end
+
+  it 'should equal with eql?' do
+    struct = RubyImmutableStruct.new(:a)
+    expect(struct.new('foo').eql?(struct.new('foo'))).to eq(true)
+  end
+
+  it 'should inequal with eql?' do
+    struct = RubyImmutableStruct.new(:a, :b)
+    expect(struct.new('foo', 'bar').eql?(struct.new('foo', 'baz'))).to eq(false)
+  end
+
+  it 'should hash to the same value' do
+    struct = RubyImmutableStruct.new(:a, :b)
+    expect(struct.new('foo', 'bar').hash).to eq(struct.new('foo', 'bar').hash)
+  end
+
+  it 'should interact with Hash as documented in README' do
+    struct = RubyImmutableStruct.new(:name, :email)
+    person = struct.new('Adam Hooper', 'adam@adamhooper.com')
+    person2 = person.merge(email: 'adam+nospam@adamhooper.com')
+    person3 = person2.merge(email: 'adam@adamhooper.com')
+    # And that means you can use them in a hash
+    hash = { person => 'yay' }
+    expect(hash[person3]).to eq('yay')
+  end
+
+  it 'should hash different structs to different values' do
+    struct = RubyImmutableStruct.new(:a, :b)
+    expect(struct.new('foo', 'bar').hash).not_to eq(struct.new('foo', 'baz').hash)
+  end
+
   it 'should inspect properly' do
     SomeStruct = RubyImmutableStruct.new(:a, :b)
     expect(SomeStruct.new('A', 'B').inspect).to eq('#<SomeStruct "A","B">')

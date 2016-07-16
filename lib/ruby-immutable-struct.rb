@@ -11,7 +11,10 @@ module RubyImmutableStruct
 
       class_eval <<-EOT
         def initialize(*args)
-          if args[0].is_a?(Hash)
+          # args.length == 1 is faster than args[0].is_a?(Hash). So check it
+          # first -- speed demons won't be using hashes, so let's save them the
+          # is_a? call.
+          if args.length == 1 && args[0].is_a?(Hash)
             hash = args[0]
             #{attributes.map{ |a| "@#{a} = hash[:#{a}]" }.join(';')}
           else

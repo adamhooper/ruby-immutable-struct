@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'ruby-immutable-struct'
-  s.version = '1.0.0'
+  s.version = '1.0.1'
   s.license = 'MIT'
   s.summary = "Like Structs, but you can't edit them once you construct them"
   s.author = 'Adam Hooper'
